@@ -1,0 +1,18 @@
+
+
+<html>
+<body>
+<h2> Edit Recipe {{recipe.name}}? </h2>
+
+<form action="{{url_for('editRecipe', cuisine_id = cuisine_id, recipe_id = recipe.id)}}" method = 'post'>
+  <label for="name">Name:</label></br>
+  <input type ="text" maxlength="100" name="name" value="{{recipe.name}}"></br>
+
+  <label for="description">Description:</label></br>
+  <textarea maxlength="800" rows="10" name="description">{{recipe.description}}</textarea></br>
+
+  <input type='submit', value = 'Edit'>
+</form>
+
+<a href = "{{url_for('showRecipeList', cuisine_id = cuisine_id)}}"> Cancel </a>
+</body>

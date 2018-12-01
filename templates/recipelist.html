@@ -1,0 +1,32 @@
+
+
+<html>
+
+<div>
+
+    <a href="{{url_for('disconnect')}}">Logout </a> </br>
+    <a href = "{{url_for('showCuisines')}}"> Back to Cuisine List </a></br>
+
+</div>
+
+<h2> {{cuisine.name}} Recipes: </h2>
+
+<div>
+  <body>
+    {% for recipe in recipes %}
+  <p>
+    <a href = "{{url_for('showRecipe', cuisine_id = cuisine.id, recipe_id = recipe.id)}}"><strong> {{recipe.name}}</strong> </a></br>
+    <a href = "{{url_for('editRecipe', cuisine_id = cuisine.id, recipe_id = recipe.id)}}"> Edit </a></br>
+    <a href = "{{url_for('deleteRecipe', cuisine_id = cuisine.id, recipe_id = recipe.id)}}"> Delete </a></br>
+    </br>
+  </p>
+    {% endfor %}
+  </body>
+
+  <div>
+    <a href="{{url_for('newRecipe', cuisine_id = cuisine.id)}}">
+      <button>Add Recipe</button>
+    </a>
+  </div>
+
+</div>

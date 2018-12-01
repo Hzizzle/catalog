@@ -1,0 +1,12 @@
+
+
+<html>
+<body>
+<h2> Are you sure you want to delete {{deleterecipe.name}}? </h2>
+
+<form action="{{url_for('deleteRecipe', cuisine_id = cuisine_id, recipe_id = deleterecipe.id)}}" method = 'post'>
+<input type='submit', value = 'Delete'>
+</form>
+
+<a href = "{{url_for('showRecipeList', cuisine_id = cuisine_id)}}"> Cancel </a>
+</body>
