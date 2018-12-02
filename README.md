@@ -7,7 +7,7 @@ URL to hosted application: http://35.177.8.190\
 
 Steps Taken & Software Installation Process:\
 
-#1. Create a Lightsail instance using Amazon Web Services (https://lightsail.aws.amazon.com/)
+# 1. Create a Lightsail instance using Amazon Web Services (https://lightsail.aws.amazon.com/)
 An instance of UBuntu Linux was chosen (OS Only) - the details were as follows:\
 Hostname: Funky-London-1
 Public IP Address: 35.177.8.190
@@ -17,10 +17,10 @@ I saved the default private key in my local directory on my local machine and re
 
 ssh -i /Users/hamza/Programming/linuxservers/LightsailDefaultKey-eu-west-2.pem ubuntu@35.177.8.190
 
-#2. Update all packages:
+# 2. Update all packages:
 sudo apt-get update
 
-#3. Create the user 'grader':
+# 3. Create the user 'grader':
 sudo adduser grader
 (password entered = grader)
 
@@ -29,7 +29,7 @@ sudo visudo
 Then paste this below "root    ALL=(ALL:ALL) ALL" in the opened file (using nano editor)
 grader  ALL=(ALL:ALL) ALL
 
-#4. Change SSH port from 22 to 2200:
+# 4. Change SSH port from 22 to 2200:
 On the Amazon Lightsail page - under Networking and Firewall add a "Custom" application that accepts connections on Port 2200
 next use:
 sudo nano /etc/ssh/sshd_config
@@ -49,7 +49,7 @@ Use the command:
 sudo systemctl restart ssh
 This restarts ssh on ubuntu and going forward the only way to ssh on is to use the port 2200
 
-#5. Create grader public/private key combo:
+# 5. Create grader public/private key combo:
 On local machine use the command:
 ssh-keygen
 This will create a pair of keys which I have called 'graderkey' and 'graderkey.pub'
@@ -59,7 +59,7 @@ The public key that was just generated 'graderkey.pub' was pasted into a new fil
 The grader user is now able to login using the following command:
 ssh grader@35.177.8.190 -p 2200 -i graderkey
 
-#6. UFW configuration:
+# 6. UFW configuration:
 Apply the following commands:
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
@@ -77,7 +77,7 @@ Configure the timezone to UTC:
 sudo dpkg-reconfigure tzdata
 Pick "UTC"
 
-#7. Install and configure Apache to serve a Python mod_wsgi app:
+# 7. Install and configure Apache to serve a Python mod_wsgi app:
 Install Apache with:
 sudo apt-get install apache2
 If you visit http://35.177.8.190 this should now produce the default Apache page
