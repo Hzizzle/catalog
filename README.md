@@ -1,35 +1,96 @@
-# Item Catalog Project
-## Project Description
+Linux Server Configuration Project:
 
-Code Background:
-This ReadMe explains the code behind a RESTful web application that has been built to catalog recipes for particular types of cuisines. The web application lists the recipes under a given cuisine and provides details on the recipe. The application also uses third party Oauth authentication through the oauth2 flow (via Google) to register and authenticate users. Only registered users have the ability to post, edit and delete their own items. The python code is written for python2 and uses the flask framework to construct the application.
+Steps Taken & Software Installation Process:
 
-Initial Setup:
-1. Save the following files in your application directory:
-  application.py
-  client_secrets.json
-  CreateCuisines.py
-  database_setup.py
-  "templates" folder (which contains 9 html files that form the basis of the website)
+1. Create a Lightsail instance using Amazon Web Services (https://lightsail.aws.amazon.com/)
+An instance of UBuntu Linux was chosen (OS Only) - the details were as follows:
+Hostname: Funky-London-1
+Public IP Address: 35.177.8.190
+User name: ubuntu
+Then use the link on the AWS website to SSH into the server
+I saved the default private key in my local directory on my local machine and referenced it when logging in using the command below:
 
-2. You will need to register a new project in the Google Developer Console. This will involve setting up a project with OAuth 2.0 access - a Client ID and Client Secret will be provided. These should be used in place of the two current values in the client_secrets.json file as well as renaming the project_id.
+ssh -i /Users/hamza/Programming/linuxservers/LightsailDefaultKey-eu-west-2.pem ubuntu@35.177.8.190
 
-3. Run the database_setup.py file in terminal - this will create a SQLite database named recipecatalog.db. This creates three classes (the tables that will be populated and queried); these are User, Cuisine, Recipe.
+2. Update all packages:
+sudo apt-get update
 
-4. Run CreateCuisines.py in order to pre-populate the Cuisines table in recipecatalog.db. This will create the 10 cuisines that will form the list for the web application.
+3. Create the user 'grader':
+sudo adduser grader
+(password entered = grader)
+
+Give them sudo access rights with the following command:
+sudo visudo
+Then paste this below "root    ALL=(ALL:ALL) ALL" in the opened file (using nano editor)
+grader  ALL=(ALL:ALL) ALL
+
+4. Change SSH port from 22 to 2200:
+On the Amazon Lightsail page - under Networking and Firewall add a "Custom" application that accepts connections on Port 2200
+next use:
+sudo nano /etc/ssh/sshd_config
+This will edit the file for all the ssh settings
+
+# What ports, IPs and protocols we listen for
+# Port 22
+Port 2200
+
+# Authentication:
+LoginGraceTime 120
+PermitRootLogin prohibit-password
+PermitRootLogin no
+StrictModes yes
+
+Use the command:
+sudo systemctl restart ssh
+This restarts ssh on ubuntu and going forward the only way to ssh on is to use the port 2200
+
+5. Create grader public/private key combo:
+On local machine use the command:
+ssh-keygen
+This will create a pair of keys which I have called 'graderkey' and 'graderkey.pub'
+A .ssh folder was then created in the follwing directory:
+/home/grader/.ssh
+The public key that was just generated 'graderkey.pub' was pasted into a new file called authorized_keys (using nano)
+The grader user is now able to login using the following command:
+ssh grader@35.177.8.190 -p 2200 -i graderkey
+
+6. UFW configuration:
+Apply the following commands:
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+Allow the ports we will need:
+sudo ufw allow ssh
+sudo ufw allow 2200/tcp
+sudo ufw allow www
+sudo ufw allow 123/udp
+
+Make the firewall active:
+sudo ufw enable
+
+Configure the timezone to UTC:
+sudo dpkg-reconfigure tzdata
+Pick "UTC"
+
+7. Install and configure Apache to serve a Python mod_wsgi app:
+Install Apache with:
+sudo apt-get install apache2
+If you visit http://35.177.8.190 this should now produce the default Apache page
+Install mod_wsgi with:
+sudo apt-get install libapache2-mod-wsgi
+sudo apt-get install python-dev
+Creation and configuration of the wsgi file will occur in step 12.
+
+8. Install Git:
+sudo apt-get install git
+
+9. Install Dependencies for the Flask Application:
+sudo apt-get install python-pip python-flask python-sqlalchemy python-psycopg2
+sudo pip install oauth2client requests httplib2
+
+10. Install Database using PostGreSql:
+First install PostGreSql:
+sudo apt-get install postgresql
 
 
-Running the server:
-1. Run the application.py file to launch the server locally. This runs it locally on http://localhost:8000/
-
-2. Logging in will take you to the user login page on Google. This will authenticate you and allow you to add, edit or delete recipes for a particular cuisine. You cannot add a new cuisine but you can add, edit or delete a recipe for a particular cuisine.
-
-
-API Queries:
-There are two options:
-1. List all the cuisines and recipes:
-Use http://localhost:8000/cuisines/JSON to return a JSON object of all the cuisines and recipes in the database
-
-2. List all the recipes for a given cuisine:
-If you know the cuisine_id and recipe_id numbers (which you can identify from the paths in your browser or from the previous API query) then you can retrieve the information on a single recipe as follows:
-http://localhost:8000/cuisines/<int:cuisine_id>/<int:recipe_id>/JSON
+11. Clone the github repo of the flask application from GitHub:
