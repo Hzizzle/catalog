@@ -43,7 +43,7 @@ Port 2200
 LoginGraceTime 120\
 PermitRootLogin prohibit-password\
 PermitRootLogin no\
-StrictModes yes\
+StrictModes yes
 
 Use the command:\
 sudo systemctl restart ssh\
@@ -51,9 +51,9 @@ This restarts ssh on ubuntu and going forward the only way to ssh on is to use t
 
 ## 5. Create grader public/private key combo:
 On local machine use the command:\
-ssh-keygen
+ssh-keygen\
 This will create a pair of keys which I have called 'graderkey' and 'graderkey.pub'\
-A .ssh folder was then created in the follwing directory:
+A .ssh folder was then created in the following directory:\
 /home/grader/.ssh\
 The public key that was just generated 'graderkey.pub' was pasted into a new file called authorized_keys (using nano)\
 The grader user is now able to login using the following command:\
@@ -62,7 +62,7 @@ ssh grader@35.177.8.190 -p 2200 -i graderkey
 ## 6. UFW configuration:
 Apply the following commands:\
 sudo ufw default deny incoming\
-sudo ufw default allow outgoing\
+sudo ufw default allow outgoing
 
 Allow the ports we will need:\
 sudo ufw allow ssh\
@@ -129,22 +129,22 @@ sudo python CreateCuisines.py
 While still in the catalog directory (/var/www/catalog) run:\
 sudo touch catalog.wsgi\
 sudo nano catalog.wsgi\
-Type the following:\
+Type the following:
 
 import sys\
 import logging
 
 logging.basicConfig(stream=sys.stderr)\
-sys.path.insert(0, '/var/www/catalog')\
+sys.path.insert(0, '/var/www/catalog')
 
 from application import app as application\
 application.secret_key='super_secret_key'
 
-## 14. Create a apache2 config file:
+## 14. Create an apache2 config file:
 cd /etc/apache2/sites-available/\
 sudo touch catalog.conf\
 sudo nano catalog.conf\
-Then type up the following in the file:\
+Then type up the following in the file:
 
 <VirtualHost \*:80>\
      ServerName  35.177.8.190\
@@ -167,14 +167,14 @@ Then type up the following in the file:\
 </VirtualHost>
 
 ## 15. Adjust my application.py file so that it doesn't run in debug mode and it references the correct directories for user authentication:
-Change:\
+Change:
 
 if __name__ == '__main__':\
     app.secret_key = 'super_secret_key'\
     app.debug = True\
     app.run(host='0.0.0.0', port=8000, threaded=False)\
 
-to the following:\
+to the following:
 
 if __name__ == '__main__':\
     app.run()\
@@ -185,7 +185,7 @@ to\
 /var/www/catalog/client_secrets.json
 
 ## 16. Restart Apache and Server should now be running
-sudo service apache2 restart\
+sudo service apache2 restart
 
 List of sources used to do this:\
 https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps\
