@@ -35,11 +35,11 @@ next use:
 sudo nano /etc/ssh/sshd_config
 This will edit the file for all the ssh settings
 
-# What ports, IPs and protocols we listen for
-# Port 22
+\# What ports, IPs and protocols we listen for
+\# Port 22
 Port 2200
 
-# Authentication:
+\# Authentication:
 LoginGraceTime 120
 PermitRootLogin prohibit-password
 PermitRootLogin no
@@ -145,8 +145,8 @@ cd /etc/apache2/sites-available/
 sudo touch catalog.conf
 sudo nano catalog.conf
 Then type up the following in the file:
-<!---
-<VirtualHost *:80>
+
+<VirtualHost \*:80>
      ServerName  35.177.8.190
      ServerAdmin email address
      #Location of the catalog WSGI file
@@ -165,7 +165,7 @@ Then type up the following in the file:
       LogLevel warn
       CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
--->
+
 15. Adjust my application.py file so that it doesn't run in debug mode and it references the correct directories for user authentication:
 Change:
 
