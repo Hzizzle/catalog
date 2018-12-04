@@ -17,8 +17,9 @@ I saved the default private key in my local directory on my local machine and re
 
 ssh -i /Users/hamza/Programming/linuxservers/LightsailDefaultKey-eu-west-2.pem ubuntu@35.177.8.190
 
-## 2. Update all packages:
+## 2. Update and upgrade all packages:
 sudo apt-get update
+sudo apt-get upgrade
 
 ## 3. Create the user 'grader':
 sudo adduser grader
@@ -41,7 +42,7 @@ Port 2200
 
 \# Authentication:\
 LoginGraceTime 120\
-PermitRootLogin prohibit-password\
+PermitRootLogin prohibit-password - comment out this line\
 PermitRootLogin no\
 StrictModes yes
 
@@ -64,14 +65,17 @@ Apply the following commands:\
 sudo ufw default deny incoming\
 sudo ufw default allow outgoing
 
-Allow the ports we will need:\
+Allow the ports we will need and deny port 22:\
 sudo ufw allow ssh\
 sudo ufw allow 2200/tcp\
 sudo ufw allow www\
-sudo ufw allow 123/udp
+sudo ufw allow 123/udp\
+sudo ufw deny 22
 
 Make the firewall active:\
 sudo ufw enable
+
+
 
 Configure the timezone to UTC:\
 sudo dpkg-reconfigure tzdata\
